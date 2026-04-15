@@ -1,0 +1,156 @@
+# Docker Compose 编排文件
+# 用于定义和运行多容器 Docker 应用
+# 使用方式: docker-compose up -d
+
+version: "3.8"
+
+# ============================================
+# 服务定义
+# ============================================
+services:
+
+  # ------------------------------------------
+  # Nginx 反向代理服务
+  # 负责路由请求到前端和后端服务
+  # ------------------------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: app-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"    # HTTP 端口
+      - "443:443"  # HTTPS 端口（后续配置 SSL 证书后启用）
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  # Nginx 配置文件（只读挂载）
+      - ./nginx/ssl:/etc/nginx/ssl:ro                # SSL 证书目录（只读挂载）
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+
+  # ------------------------------------------
+  # Next.js 前端服务
+  # 提供前端页面和静态资源
+  # ------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  # ------------------------------------------
+  # Spring Boot 后端服务
+  # 提供 RESTful API 接口
+  # ------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/appdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    networks:
+      - app-network
+
+  # ------------------------------------------
+  # PostgreSQL 数据库服务
+  # 主数据库，存储业务数据
+  # ------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: app-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=appdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # 持久化数据库数据
+    networks:
+      - app-network
+
+  # ------------------------------------------
+  # Redis 缓存服务
+  # 用于会话管理、缓存和消息队列
+  # ------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: app-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes  # 开启 AOF 持久化
+    volumes:
+      - redisdata:/data
+    networks:
+      - app-network
+
+  # ------------------------------------------
+  # MinIO 对象存储服务
+  # 兼容 S3 协议，用于文件存储
+  # ------------------------------------------
+  minio:
+    image: minio/minio
+    container_name: app-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"  # API 端口
+      - "9001:9001"  # 控制台端口
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - miniodata:/data
+    networks:
+      - app-network
+
+# ============================================
+# 数据卷定义
+# ============================================
+volumes:
+  # PostgreSQL 数据持久化卷
+  pgdata:
+    driver: local
+
+  # Redis 数据持久化卷
+  redisdata:
+    driver: local
+
+  # MinIO 数据持久化卷
+  miniodata:
+    driver: local
+
+# ============================================
+# 网络定义
+# ============================================
+networks:
+  # 应用内部通信网络
+  app-network:
+    driver: bridge
