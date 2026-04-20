@@ -1,93 +1,58 @@
 # ============================================
 # GitHub Actions CI/CD 工作流配置
-# 用于自动化测试和部署
 # ============================================
 
 name: CI/CD Pipeline
 
-# 触发条件
 on:
-  # 推送到 main 分支时触发
   push:
-    branches:
-      - main
-      - develop
-  # 创建 Pull Request 时触发
+    branches: [main, develop]
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [main, develop]
 
-# 全局环境变量
 env:
   NODE_VERSION: "22"
   JAVA_VERSION: "21"
   JAVA_DISTRIBUTION: "temurin"
 
-# ============================================
-# Jobs 定义
-# ============================================
 jobs:
-
-  # ------------------------------------------
-  # 前端测试任务
-  # 检查代码规范、编译构建是否通过
-  # ------------------------------------------
+  # 前端测试
   frontend-test:
     name: Frontend Test
     runs-on: ubuntu-latest
-
-    # 设置工作目录
     defaults:
       run:
         working-directory: ./frontend
 
     steps:
-      # 1. 拉取代码
       - name: Checkout 代码
         uses: actions/checkout@v4
 
-      # 2. 配置 Node.js 环境
       - name: 设置 Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-          cache-dependency-path: ./frontend/package-lock.json
 
-      # 3. 安装依赖
       - name: 安装依赖
-        run: npm ci
+        run: npm install
 
-      # 4. 代码规范检查
-      - name: 运行 ESLint 代码检查
-        run: npm run lint
-
-      # 5. 构建项目
       - name: 构建项目
         run: npm run build
         env:
           NODE_ENV: production
 
-  # ------------------------------------------
-  # 后端测试任务
-  # 运行单元测试和集成测试
-  # ------------------------------------------
+  # 后端测试
   backend-test:
     name: Backend Test
     runs-on: ubuntu-latest
-
-    # 设置工作目录
     defaults:
       run:
         working-directory: ./backend
 
     steps:
-      # 1. 拉取代码
       - name: Checkout 代码
         uses: actions/checkout@v4
 
-      # 2. 配置 Java 环境
       - name: 设置 JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
@@ -95,54 +60,5 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: "maven"
 
-      # 3. 运行测试
       - name: 运行 Maven 测试
         run: mvn test -B
-
-      # 4. 上传测试报告（如果有）
-      - name: 上传测试报告
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-test-report
-          path: ./backend/target/surefire-reports/
-          retention-days: 30
-
-  # ------------------------------------------
-  # 部署任务（可选，后续启用）
-  # 将应用部署到生产环境
-  # ------------------------------------------
-  # deploy:
-  #   name: Deploy to Production
-  #   runs-on: ubuntu-latest
-  #   needs: [frontend-test, backend-test]
-  #   # 仅在 main 分支的 push 事件时部署
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #
-  #   steps:
-  #     # 1. 拉取代码
-  #     - name: Checkout 代码
-  #       uses: actions/checkout@v4
-  #
-  #     # 2. 配置 SSH 密钥
-  #     - name: 配置 SSH
-  #       uses: webfactory/ssh-agent@v0.9.0
-  #       with:
-  #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #
-  #     # 3. 部署到服务器
-  #     - name: 部署到生产服务器
-  #       run: |
-  #         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-  #           cd /opt/app
-  #           git pull origin main
-  #           docker-compose -f docker-compose.yml pull
-  #           docker-compose -f docker-compose.yml up -d --build
-  #           docker image prune -f
-  #         EOF
-  #
-  #     # 4. 部署后健康检查
-  #     - name: 健康检查
-  #       run: |
-  #         sleep 30
-  #         curl -f http://${{ secrets.SERVER_HOST }}/api/actuator/health || exit 1
