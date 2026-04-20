@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # 安装全部依赖（包括 devDependencies，构建需要）
-RUN npm ci
+RUN npm install
 
 # ------------------------------------------
 # Stage 2: 构建阶段
