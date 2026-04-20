@@ -1,12 +1,10 @@
 # ============================================
 # Next.js 前端多阶段构建 Dockerfile
-# 使用 Node.js 24 Debian Slim 镜像（兼容 lightningcss 原生模块）
+# 使用国内镜像源解决 Docker Hub 访问问题
 # ============================================
 
-# ------------------------------------------
-# Stage 1: 安装依赖
-# ------------------------------------------
-FROM node:24-slim AS deps
+# 镜像源（国内加速）
+FROM docker.1ms.run/library/node:24-slim AS deps
 
 WORKDIR /app
 
@@ -14,10 +12,7 @@ COPY package.json package-lock.json* ./
 
 RUN npm install
 
-# ------------------------------------------
-# Stage 2: 构建阶段
-# ------------------------------------------
-FROM node:24-slim AS build
+FROM docker.1ms.run/library/node:24-slim AS build
 
 WORKDIR /app
 
@@ -30,17 +25,12 @@ ENV NEXT_PUBLIC_API_URL=http://localhost/api
 
 RUN npm run build
 
-# ------------------------------------------
-# Stage 3: 运行时阶段
-# ------------------------------------------
-FROM node:24-slim AS runner
+FROM docker.1ms.run/library/node:24-slim AS runner
 
 WORKDIR /app
 
-# 设置时区
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# 创建非 root 用户
 RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs nextjs
 
