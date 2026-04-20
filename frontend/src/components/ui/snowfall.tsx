@@ -17,6 +17,7 @@ interface SnowfallProps {
 interface Snowflake {
   id: number;
   x: number;
+  y: number;
   size: number;
   opacity: number;
   speed: number;
@@ -47,6 +48,7 @@ export function Snowfall({ snowflakeCount = 80, enabled = true }: SnowfallProps)
       snowflakes.push({
         id: i,
         x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
         size: Math.random() * 4 + 1,
         opacity: Math.random() * 0.6 + 0.2,
         speed: Math.random() * 1.5 + 0.5,
