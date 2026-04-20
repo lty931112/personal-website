@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
   // env: {},
 
   /* 输出模式：standalone 适合 Docker 部署 */
-  // output: "standalone",
+  output: "standalone",
 
   /* 国际化配置（如需要可取消注释） */
   // i18n: {
