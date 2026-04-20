@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, ReactNode } from "react";
+import { useEffect, useRef, useState, ReactNode, useCallback } from "react";
 
 /**
- * 鼠标跟随聚光灯背景效果
- * 在整个页面创建跟随鼠标移动的聚光灯效果
+ * 全局鼠标跟随聚光灯效果
+ * 在整个页面创建跟随鼠标移动的动态光效
+ * 使用 requestAnimationFrame 优化性能，支持平滑过渡
  */
 
 interface SpotlightBackgroundProps {
@@ -12,20 +13,24 @@ interface SpotlightBackgroundProps {
   className?: string;
   spotlightSize?: number;
   spotlightColor?: string;
+  gradientOpacity?: number;
 }
 
 export function SpotlightBackground({
   children,
   className = "",
   spotlightSize = 600,
-  spotlightColor = "rgba(59, 130, 246, 0.15)",
+  spotlightColor = "59, 130, 246",
+  gradientOpacity = 0.12,
 }: SpotlightBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const rafRef = useRef<number>(0);
+  const [position, setPosition] = useState({ x: -1000, y: -1000 });
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         setPosition({
@@ -34,34 +39,46 @@ export function SpotlightBackground({
         });
         setIsVisible(true);
       }
-    };
+    });
+  }, []);
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
+  const handleMouseLeave = useCallback(() => {
+    setIsVisible(false);
+  }, []);
 
+  useEffect(() => {
     const container = containerRef.current;
     if (container) {
       container.addEventListener("mousemove", handleMouseMove);
       container.addEventListener("mouseleave", handleMouseLeave);
     }
-
     return () => {
       if (container) {
         container.removeEventListener("mousemove", handleMouseMove);
         container.removeEventListener("mouseleave", handleMouseLeave);
       }
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [handleMouseMove, handleMouseLeave]);
 
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
-      {/* 聚光灯效果层 */}
+    <div ref={containerRef} className={`relative overflow-hidden ${className}`}>
+      {/* 主聚光灯 - 大范围柔和光效 */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
-          opacity: isVisible ? 1 : 0,
-          background: `radial-gradient(${spotlightSize}px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 40%)`,
+          opacity: isVisible ? gradientOpacity : 0,
+          transition: "opacity 0.5s ease",
+          background: `radial-gradient(${spotlightSize}px circle at ${position.x}px ${position.y}px, rgba(${spotlightColor}, ${gradientOpacity}), rgba(${spotlightColor}, 0.03) 40%, transparent 70%)`,
+        }}
+      />
+      {/* 内核高光 - 小范围强烈光效 */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          opacity: isVisible ? 0.6 : 0,
+          transition: "opacity 0.3s ease",
+          background: `radial-gradient(150px circle at ${position.x}px ${position.y}px, rgba(${spotlightColor}, 0.15), transparent 60%)`,
         }}
       />
       {/* 内容 */}
