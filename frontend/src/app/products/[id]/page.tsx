@@ -75,6 +75,11 @@ const mockProducts: Record<string, {
   },
 };
 
+/* 生成静态路径参数 */
+export function generateStaticParams() {
+  return Object.keys(mockProducts).map((id) => ({ id }));
+}
+
 /* 生成动态元数据 */
 export async function generateMetadata({ params }: ProductDetailPageProps): Promise<Metadata> {
   const { id } = await params;

@@ -5,56 +5,42 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to server via SSH
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: cd frontend && npm install
+
+      - name: Build static site
+        run: cd frontend && npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to server via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          source: "frontend/out/*"
+          target: "/var/web/lty.info/html/"
+          strip_components: 2
+          rm: true
+
+      - name: Reload Nginx
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          command_timeout: 20m
-          script: |
-            echo "=== 开始部署 ==="
-            
-            cd /opt/app
-            
-            # 拉取最新代码（重试 3 次）
-            for i in 1 2 3; do
-              if git pull origin main; then
-                echo "代码拉取成功"
-                break
-              else
-                echo "第 $i 次拉取失败，重试..."
-                sleep 5
-              fi
-            fi
-            
-            # 重新构建 Docker 镜像（不使用缓存，确保用最新 Dockerfile）
-            docker build --no-cache -t app-frontend ./frontend
-            
-            # 重启容器
-            docker rm -f app-frontend 2>/dev/null
-            docker run -d \
-              --name app-frontend \
-              --restart unless-stopped \
-              -p 3000:3000 \
-              app-frontend
-            
-            # 等待容器启动
-            sleep 10
-            
-            # 检查容器状态
-            if docker ps | grep -q app-frontend; then
-              echo "=== 部署成功 ==="
-              docker logs --tail 10 app-frontend
-            else
-              echo "=== 部署失败，查看日志 ==="
-              docker logs app-frontend
-              exit 1
-            fi
+          script: nginx -s reload

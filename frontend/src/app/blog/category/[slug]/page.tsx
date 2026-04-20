@@ -9,6 +9,19 @@ interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
 
+/* 模拟分类 slug 列表 */
+const mockCategorySlugs = [
+  "技术教程",
+  "前端技术",
+  "编程语言",
+  "行业动态",
+];
+
+/* 生成静态路径参数 */
+export function generateStaticParams() {
+  return mockCategorySlugs.map((slug) => ({ slug }));
+}
+
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
 

@@ -9,6 +9,23 @@ interface TagPageProps {
   params: Promise<{ slug: string }>;
 }
 
+/* 模拟标签 slug 列表 */
+const mockTagSlugs = [
+  "Next.js",
+  "React",
+  "前端",
+  "Tailwind CSS",
+  "CSS",
+  "TypeScript",
+  "JavaScript",
+  "编程",
+];
+
+/* 生成静态路径参数 */
+export function generateStaticParams() {
+  return mockTagSlugs.map((slug) => ({ slug }));
+}
+
 export default async function TagPage({ params }: TagPageProps) {
   const { slug } = await params;
 

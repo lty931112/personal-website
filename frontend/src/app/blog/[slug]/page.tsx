@@ -9,6 +9,18 @@ interface BlogDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
+/* 模拟博客文章 slug 列表 */
+const mockBlogSlugs = [
+  "getting-started-with-nextjs",
+  "tailwind-css-4-new-features",
+  "typescript-best-practices",
+];
+
+/* 生成静态路径参数 */
+export function generateStaticParams() {
+  return mockBlogSlugs.map((slug) => ({ slug }));
+}
+
 export default async function BlogDetailPage({
   params,
 }: BlogDetailPageProps) {

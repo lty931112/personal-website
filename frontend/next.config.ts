@@ -2,33 +2,20 @@ import type { NextConfig } from "next";
 
 /**
  * Next.js 配置文件
- * @see https://nextjs.org/docs/app/api-reference/config/next-config-js
+ * 静态导出模式，部署到 Nginx 托管
  */
 const nextConfig: NextConfig = {
-  /* 启用 React 严格模式 */
   reactStrictMode: true,
 
-  /* 远程图片域名白名单，按需添加 */
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-    ],
+    unoptimized: true,
   },
 
-  /* 环境变量前缀，只有 NEXT_PUBLIC_ 前缀的变量才会暴露给客户端 */
-  // env: {},
+  /* 静态导出模式 */
+  output: "export",
 
-  /* 输出模式：standalone 适合 Docker 部署 */
-  output: "standalone",
-
-  /* 国际化配置（如需要可取消注释） */
-  // i18n: {
-  //   locales: ["zh-CN", "en"],
-  //   defaultLocale: "zh-CN",
-  // },
+  /* 静态导出时不使用 trailing slash，保持 URL 简洁 */
+  trailingSlash: false,
 };
 
 export default nextConfig;
