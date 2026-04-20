@@ -7,7 +7,7 @@
 # Stage 1: 安装依赖
 # 单独阶段安装依赖，利用 Docker 缓存层优化构建速度
 # ------------------------------------------
-FROM node:22-alpine AS deps
+FROM node:24-alpine AS deps
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm ci
 # Stage 2: 构建阶段
 # 编译 Next.js 项目，生成优化后的生产构建产物
 # ------------------------------------------
-FROM node:22-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -43,7 +43,7 @@ RUN npm run build
 # 最小化运行时镜像，仅包含必要的生产文件
 # standalone 模式会生成自包含的输出
 # ------------------------------------------
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 
 WORKDIR /app
 
