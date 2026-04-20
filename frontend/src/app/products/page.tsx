@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/products/ProductCard";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import type { Product, ProductCategory } from "@/types/product";
+import type { ID } from "@/types";
 
 /**
  * 产品列表页
@@ -136,7 +137,7 @@ const sortOptions = [
 
 export default function ProductsPage() {
   const [keyword, setKeyword] = useState("");
-  const [activeCategory, setActiveCategory] = useState<number>(0);
+  const [activeCategory, setActiveCategory] = useState<ID>(0);
   const [sortBy, setSortBy] = useState("sortOrder");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
