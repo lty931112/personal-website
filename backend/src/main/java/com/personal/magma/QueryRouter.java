@@ -1,6 +1,7 @@
 package com.personal.magma;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  * MAGMA 查询意图路由
@@ -8,6 +9,7 @@ import lombok.Data;
  *
  * @author personal
  */
+@Component
 @Data
 public class QueryRouter {
 
