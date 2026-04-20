@@ -16,7 +16,7 @@ export interface PaginationParams {
 }
 
 /** 通用 ID 类型 */
-export type ID = string;
+export type ID = string | number;
 
 /** 时间戳类型 */
 export type Timestamp = string;
