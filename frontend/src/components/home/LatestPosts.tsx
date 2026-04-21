@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
 import { FlipCard } from "@/components/ui/flip-card";
-import { AutoScroll } from "@/components/ui/auto-scroll";
 
 /**
  * 最新文章 - 横向自动滚动（反向）
@@ -53,10 +52,10 @@ const glassStyle = {
 
 function PostCard({ post }: { post: typeof latestPosts[0] }) {
   return (
-    <div className="shrink-0 w-[320px]">
+    <div className="w-full">
       <FlipCard className="rounded-xl" style={glassStyle}
         front={
-          <div className="p-6 h-full flex flex-col" style={{ minHeight: "280px" }}>
+          <div className="p-6 h-full flex flex-col" style={{ minHeight: "200px" }}>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex items-center gap-1 text-xs px-3 py-1 bg-indigo-500/10 text-indigo-600 font-medium">
                 <Tag className="h-3 w-3" />{post.category}
@@ -74,7 +73,7 @@ function PostCard({ post }: { post: typeof latestPosts[0] }) {
         }
         back={
           <Link href={`/blog/${post.slug}`} className="block h-full">
-            <div className={`h-full bg-gradient-to-br ${post.coverGradient} flex flex-col items-center justify-center p-8`} style={{ minHeight: "280px" }}>
+            <div className={`h-full bg-gradient-to-br ${post.coverGradient} flex flex-col items-center justify-center p-8`} style={{ minHeight: "200px" }}>
               <span className="text-8xl mb-6">{post.coverEmoji}</span>
               <h3 className="text-lg font-bold text-slate-800 mb-2">{post.title}</h3>
               <p className="text-sm text-slate-500 mb-4">{post.category} · {post.readTime}</p>
@@ -107,20 +106,16 @@ export function LatestPosts() {
           </Link>
         </motion.div>
 
-        {/* 横向自动滚动（反向） */}
         <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <AutoScroll speed={-30} className="py-4">
-            {latestPosts.map((post) => (
-              <div key={post.slug} className="pr-6">
-                <PostCard post={post} />
-              </div>
-            ))}
-          </AutoScroll>
+          {latestPosts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
         </motion.div>
 
         <div className="mt-8 text-center md:hidden">

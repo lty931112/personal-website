@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, Github } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { FlipCard } from "@/components/ui/flip-card";
-import { AutoScroll } from "@/components/ui/auto-scroll";
 
 /**
  * 精选产品展示 - 横向自动滚动
@@ -54,10 +53,10 @@ const glassStyle = {
 
 function ProductCard({ product }: { product: typeof featuredProducts[0] }) {
   return (
-    <div className="shrink-0 w-[320px]">
+    <div className="w-full">
       <FlipCard className="rounded-xl" style={glassStyle}
         front={
-          <div className="p-6 h-full flex flex-col" style={{ minHeight: "280px" }}>
+          <div className="p-6 h-full flex flex-col" style={{ minHeight: "200px" }}>
             <h3 className="text-xl font-bold mb-3 text-slate-800">{product.title}</h3>
             <p className="text-sm text-slate-600 mb-5 flex-grow line-clamp-3">{product.description}</p>
             <div className="flex flex-wrap gap-2 mb-5">
@@ -80,7 +79,7 @@ function ProductCard({ product }: { product: typeof featuredProducts[0] }) {
         }
         back={
           <Link href={`/products/${product.id}`} className="block h-full">
-            <div className={`h-full bg-gradient-to-br ${product.coverGradient} flex flex-col items-center justify-center p-8`} style={{ minHeight: "280px" }}>
+            <div className={`h-full bg-gradient-to-br ${product.coverGradient} flex flex-col items-center justify-center p-8`} style={{ minHeight: "200px" }}>
               <span className="text-8xl mb-6">{product.coverEmoji}</span>
               <h3 className="text-xl font-bold text-slate-800 mb-2">{product.title}</h3>
               <p className="text-sm text-slate-500 mb-6">点击查看详情</p>
@@ -117,20 +116,16 @@ export function FeaturedProducts() {
           </Link>
         </motion.div>
 
-        {/* 横向自动滚动 */}
         <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <AutoScroll speed={35} className="py-4">
-            {featuredProducts.map((product) => (
-              <div key={product.id} className="pr-6">
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </AutoScroll>
+          {featuredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </motion.div>
 
         <div className="mt-8 text-center md:hidden">

@@ -7,7 +7,6 @@ import { SkillsSection } from "@/components/home/SkillsSection";
 import { MagicCard } from "@/components/ui/magic-card";
 import { RibbonTrail } from "@/components/ui/ribbon-trail";
 import { RippleClick } from "@/components/ui/ripple-click";
-import { BlindsReveal } from "@/components/ui/blinds-reveal";
 import { BootAnimation } from "@/components/ui/boot-animation";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -100,15 +99,13 @@ export default function HomePage() {
             </div>
           </section>
 
-        {/* 第三屏：卷帘门展开 - 精选作品 + 最新文章 */}
-        <BlindsReveal slats={10} staggerDelay={60}>
+        {/* 第三屏：精选作品 + 最新文章 */}
           <section className="py-20 px-4" style={{ background: "#f8fafc" }}>
             <FeaturedProducts />
             <div className="mt-12">
               <LatestPosts />
             </div>
           </section>
-        </BlindsReveal>
 
         {/* 第六屏：电脑开机动画 + 提交需求 CTA */}
         <section className="py-20 px-4" style={{ background: "linear-gradient(180deg, #f1f5f9, #e2e8f0)" }}>
