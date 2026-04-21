@@ -6,6 +6,7 @@ import { LatestPosts } from "@/components/home/LatestPosts";
 import { SkillsSection } from "@/components/home/SkillsSection";
 import { MagicBackground } from "@/components/ui/magic-background";
 import { MagicCard } from "@/components/ui/magic-card";
+import { RibbonTrail } from "@/components/ui/ribbon-trail";
 import { SeasonBackground } from "@/components/ui/season-background";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -46,7 +47,13 @@ const features = [
 export default function HomePage() {
   return (
     <SeasonBackground>
-      <MagicBackground gradientSize={600}>
+      <RibbonTrail
+        colors={["#ff9346", "#7cff67", "#ffee51", "#00d8ff", "#ff6b9d", "#c084fc"]}
+        ribbonCount={4}
+        ribbonWidth={18}
+        trailLength={50}
+        fadeSpeed={0.012}
+      >
         <div className="flex flex-col" style={{ color: "#1e293b" }}>
           {/* Hero 横幅区域 */}
           <HeroSection />
@@ -152,7 +159,7 @@ export default function HomePage() {
             </motion.div>
           </section>
         </div>
-      </MagicBackground>
+      </RibbonTrail>
     </SeasonBackground>
   );
 }
