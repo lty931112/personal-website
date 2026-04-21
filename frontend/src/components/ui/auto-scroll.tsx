@@ -1,20 +1,18 @@
 "use client";
 
-import { useRef, useState, useEffect, ReactNode, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, ReactNode } from "react";
 
 /**
  * 横向自动滚动容器
  * 内容自动横向滚动，鼠标悬停暂停，移走继续
- * 支持无限循环（内容复制一份拼接）
+ * 支持正向/反向无限循环
  */
 
 interface AutoScrollProps {
   children: ReactNode;
   className?: string;
-  /** 滚动速度（px/s） */
+  /** 滚动速度（px/s），负值表示反向 */
   speed?: number;
-  /** 暂停间隔（ms） */
-  pauseInterval?: number;
 }
 
 export function AutoScroll({
@@ -28,6 +26,7 @@ export function AutoScroll({
   const [isPaused, setIsPaused] = useState(false);
   const offsetRef = useRef(0);
   const lastTimeRef = useRef(0);
+  const halfWidthRef = useRef(0);
 
   const animate = useCallback((timestamp: number) => {
     if (!lastTimeRef.current) lastTimeRef.current = timestamp;
@@ -39,11 +38,23 @@ export function AutoScroll({
 
       const content = contentRef.current;
       if (content) {
-        const halfWidth = content.scrollWidth / 2;
-        // 无限循环：偏移量超过一半宽度时重置
-        if (Math.abs(offsetRef.current) >= halfWidth) {
-          offsetRef.current += halfWidth;
+        // 首次计算一半宽度
+        if (halfWidthRef.current === 0) {
+          halfWidthRef.current = content.scrollWidth / 2;
         }
+        const halfWidth = halfWidthRef.current;
+
+        if (halfWidth > 0) {
+          // 正向滚动（speed > 0）：offset 变负，超过 halfWidth 时重置
+          if (speed > 0 && offsetRef.current <= -halfWidth) {
+            offsetRef.current += halfWidth;
+          }
+          // 反向滚动（speed < 0）：offset 变正，超过 halfWidth 时重置
+          if (speed < 0 && offsetRef.current >= 0) {
+            offsetRef.current -= halfWidth;
+          }
+        }
+
         content.style.transform = `translateX(${offsetRef.current}px)`;
       }
     }
