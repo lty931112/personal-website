@@ -7,6 +7,7 @@ import { SkillsSection } from "@/components/home/SkillsSection";
 import { MagicBackground } from "@/components/ui/magic-background";
 import { MagicCard } from "@/components/ui/magic-card";
 import { RibbonTrail } from "@/components/ui/ribbon-trail";
+import { RippleClick } from "@/components/ui/ripple-click";
 import { SeasonBackground } from "@/components/ui/season-background";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -47,6 +48,11 @@ const features = [
 export default function HomePage() {
   return (
     <SeasonBackground>
+      <RippleClick
+        colors={["#6366f1", "#8b5cf6", "#ec4899", "#f97316", "#00d8ff", "#7cff67"]}
+        maxRadius={120}
+        duration={800}
+      >
       <RibbonTrail
         colors={["#ff9346", "#7cff67", "#ffee51", "#00d8ff", "#ff6b9d", "#c084fc"]}
         ribbonCount={4}
@@ -160,6 +166,7 @@ export default function HomePage() {
           </section>
         </div>
       </RibbonTrail>
+      </RippleClick>
     </SeasonBackground>
   );
 }
