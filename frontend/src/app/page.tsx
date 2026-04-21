@@ -116,37 +116,7 @@ export default function HomePage() {
 
         {/* 第六屏：电脑开机动画 + 提交需求 CTA */}
         <section className="py-20 px-4" style={{ background: "linear-gradient(180deg, #f1f5f9, #e2e8f0)" }}>
-          <BootAnimation className="mb-16">
-            <div className="text-center py-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-800">
-                有项目想法？让我们一起实现
-              </h2>
-              <p className="text-slate-500 max-w-xl mx-auto mb-8">
-                无论是产品开发、技术咨询还是技术合作，我都期待与您交流
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href="/request"
-                  className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium transition-all hover:shadow-lg"
-                  style={{
-                    background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                    borderRadius: "9999px",
-                    boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)",
-                  }}
-                >
-                  提交需求
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/knowledge"
-                  className="inline-flex items-center gap-2 px-8 py-3 border border-slate-300 text-slate-700 font-medium hover:bg-white transition-colors"
-                  style={{ borderRadius: "9999px" }}
-                >
-                  探索知识库
-                </Link>
-              </div>
-            </div>
-          </BootAnimation>
+          <BootAnimation />
         </section>
 
       </RibbonTrail>

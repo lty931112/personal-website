@@ -4,8 +4,7 @@ import { useRef, useState, useEffect, ReactNode } from "react";
 
 /**
  * 卷帘门展开动画
- * 滚动到可视区域时，卷帘条依次向下收起，露出下方内容
- * 动画完成后完全隐藏卷帘层
+ * 卷帘条从中间向上下两边分开，露出下方内容
  */
 
 interface BlindsRevealProps {
@@ -15,7 +14,7 @@ interface BlindsRevealProps {
   staggerDelay?: number;
 }
 
-export function BlindsReveal({ children, className = "", slats = 8, staggerDelay = 80 }: BlindsRevealProps) {
+export function BlindsReveal({ children, className = "", slats = 8, staggerDelay = 60 }: BlindsRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isDone, setIsDone] = useState(false);
@@ -25,13 +24,12 @@ export function BlindsReveal({ children, className = "", slats = 8, staggerDelay
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  // 动画完成后隐藏卷帘层
   useEffect(() => {
     if (isVisible) {
       const totalDuration = slats * staggerDelay + 600;
@@ -40,25 +38,41 @@ export function BlindsReveal({ children, className = "", slats = 8, staggerDelay
     }
   }, [isVisible, slats, staggerDelay]);
 
-  return (
-    <div ref={containerRef} className={`relative ${className}`}>
-      {/* 内容层 */}
-      <div className="relative z-0">{children}</div>
+  // 将 slats 分成上下两半
+  const halfSlats = Math.ceil(slats / 2);
 
-      {/* 卷帘遮罩层 */}
+  return (
+    <div ref={containerRef} className={className}>
+      {/* 内容层 */}
+      {children}
+
+      {/* 卷帘遮罩层 - 上半部分向上移出，下半部分向下移出 */}
       {!isDone && (
         <div
-          className="absolute inset-0 z-10 flex flex-col"
+          className="absolute inset-0 z-20 flex flex-col"
           style={{ pointerEvents: "none" }}
         >
-          {Array.from({ length: slats }, (_, i) => (
+          {/* 上半部分卷帘 - 向上移出 */}
+          {Array.from({ length: halfSlats }, (_, i) => (
             <div
-              key={i}
+              key={`top-${i}`}
+              className="flex-1"
+              style={{
+                background: "linear-gradient(135deg, #4c1d95, #7c3aed)",
+                transform: isVisible ? `translateY(-100%)` : "translateY(0)",
+                transition: `transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${i * staggerDelay}ms`,
+              }}
+            />
+          ))}
+          {/* 下半部分卷帘 - 向下移出 */}
+          {Array.from({ length: slats - halfSlats }, (_, i) => (
+            <div
+              key={`bottom-${i}`}
               className="flex-1"
               style={{
                 background: "linear-gradient(135deg, #4c1d95, #7c3aed)",
                 transform: isVisible ? `translateY(100%)` : "translateY(0)",
-                transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * staggerDelay}ms`,
+                transition: `transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${(halfSlats + i) * staggerDelay}ms`,
               }}
             />
           ))}
