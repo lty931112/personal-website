@@ -33,9 +33,25 @@ export default function HomePage() {
         {/* 第一屏：斜切分屏个人介绍 */}
         <HeroSection />
 
-        {/* 第二屏：特色卡片（Hero 滚动拉开后露出） */}
+        {/* 第二屏：技术栈 + 特色卡片（Hero 滚动拉开后露出） */}
           <section className="min-h-screen flex items-center justify-center px-4 py-20" style={{ background: "#f8fafc" }}>
             <div className="container mx-auto max-w-5xl">
+              {/* 技术栈 */}
+              <motion.div
+                className="mb-16"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold mb-2 text-slate-800">技术栈</h2>
+                  <p className="text-slate-500">多年开发经验积累的技术能力</p>
+                </div>
+                <SkillsSection />
+              </motion.div>
+
+              {/* 为什么选择我 */}
               <motion.div
                 className="text-center mb-16"
                 initial={{ opacity: 0, y: 30 }}
@@ -84,24 +100,7 @@ export default function HomePage() {
             </div>
           </section>
 
-        {/* 第三屏：技术栈卡片墙 */}
-        <section className="py-20 px-4" style={{ background: "linear-gradient(180deg, #f8fafc, #f1f5f9)" }}>
-          <div className="container mx-auto">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-3xl font-bold mb-2 text-slate-800">技术栈</h2>
-              <p className="text-slate-500">多年开发经验积累的技术能力</p>
-            </motion.div>
-            <SkillsSection />
-          </div>
-        </section>
-
-        {/* 第四屏：卷帘门展开 - 精选作品 */}
+        {/* 第三屏：卷帘门展开 - 精选作品 */}
         <BlindsReveal slats={10} staggerDelay={60}>
           <section className="py-20 px-4" style={{ background: "#f8fafc" }}>
             <FeaturedProducts />
