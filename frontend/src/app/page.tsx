@@ -6,6 +6,7 @@ import { LatestPosts } from "@/components/home/LatestPosts";
 import { SkillsSection } from "@/components/home/SkillsSection";
 import { MagicBackground } from "@/components/ui/magic-background";
 import { MagicCard } from "@/components/ui/magic-card";
+import { SeasonBackground } from "@/components/ui/season-background";
 import { Snowfall } from "@/components/ui/snowfall";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -13,7 +14,7 @@ import { ArrowRight, Sparkles, Zap, Shield, Heart } from "lucide-react";
 
 /**
  * 首页
- * 雪夜主题 + 全局鼠标彩色云光 + 卡片悬停光效 + 飘雪动画
+ * 四季背景 + 鼠标彩色云光 + 飘雪动画
  */
 
 const features = [
@@ -45,123 +46,117 @@ const features = [
 
 export default function HomePage() {
   return (
-    <MagicBackground
-      gradientSize={500}
-      gradientColor="#818cf8"
-      gradientOpacity={0.15}
-    >
-      <div className="flex flex-col relative" style={{
-        background: "linear-gradient(180deg, #0f172a 0%, #1e293b 30%, #1e293b 70%, #0f172a 100%)",
-        color: "#e2e8f0",
-      }}>
-        {/* 飘雪动画 */}
-        <Snowfall snowflakeCount={80} enabled={true} />
+    <SeasonBackground>
+      <MagicBackground gradientSize={500}>
+        <div className="flex flex-col" style={{ color: "#e2e8f0" }}>
+          {/* 飘雪动画 */}
+          <Snowfall snowflakeCount={60} enabled={true} />
 
-        {/* Hero 横幅区域 */}
-        <HeroSection />
+          {/* Hero 横幅区域 */}
+          <HeroSection />
 
-        {/* 精选作品 */}
-        <FeaturedProducts />
+          {/* 精选作品 */}
+          <FeaturedProducts />
 
-        {/* 最新文章 */}
-        <LatestPosts />
+          {/* 最新文章 */}
+          <LatestPosts />
 
-        {/* 技术栈 */}
-        <SkillsSection />
+          {/* 技术栈 */}
+          <SkillsSection />
 
-        {/* 特色区域 */}
-        <section className="py-16 px-4">
-          <div className="container mx-auto">
+          {/* 特色区域 */}
+          <section className="py-16 px-4">
+            <div className="container mx-auto">
+              <motion.div
+                className="text-center mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <h2 className="text-3xl font-bold mb-4" style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>为什么选择我</h2>
+                <p className="text-slate-300 max-w-2xl mx-auto" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.5)" }}>
+                  专注于技术深度和产品质量，为每一个项目提供最佳解决方案
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, staggerChildren: 0.1 }}
+              >
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <MagicCard
+                      className="h-full"
+                      gradientSize={300}
+                      gradientColor={feature.color}
+                      gradientOpacity={0.25}
+                    >
+                      <div className="p-6 rounded-xl border h-full" style={{
+                        background: "rgba(0, 0, 0, 0.25)",
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                        backdropFilter: "blur(16px)",
+                        WebkitBackdropFilter: "blur(16px)",
+                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+                      }}>
+                        <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{
+                          background: `${feature.color}30`,
+                        }}>
+                          <feature.icon className="h-6 w-6" style={{ color: feature.color }} />
+                        </div>
+                        <h3 className="text-lg font-semibold mb-2" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.3)" }}>{feature.title}</h3>
+                        <p className="text-sm text-slate-300">{feature.description}</p>
+                      </div>
+                    </MagicCard>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </section>
+
+          {/* CTA 区域 */}
+          <section className="py-20 px-4">
             <motion.div
-              className="text-center mb-12"
+              className="container mx-auto text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold mb-4">为什么选择我</h2>
-              <p className="text-slate-400 max-w-2xl mx-auto">
-                专注于技术深度和产品质量，为每一个项目提供最佳解决方案
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
+                有项目想法？让我们一起实现
+              </h2>
+              <p className="text-slate-300 max-w-xl mx-auto mb-8" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.5)" }}>
+                无论是产品开发、技术咨询还是技术合作，我都期待与您交流
               </p>
-            </motion.div>
-
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, staggerChildren: 0.1 }}
-            >
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  href="/request"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-400 transition-all hover:shadow-lg hover:shadow-indigo-500/25"
                 >
-                  <MagicCard
-                    className="h-full"
-                    gradientSize={300}
-                    gradientColor={feature.color}
-                    gradientOpacity={0.25}
-                  >
-                    <div className="p-6 rounded-xl border h-full" style={{
-                      background: "rgba(30, 41, 59, 0.6)",
-                      borderColor: "rgba(71, 85, 105, 0.5)",
-                      backdropFilter: "blur(12px)",
-                    }}>
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{
-                        background: `${feature.color}20`,
-                      }}>
-                        <feature.icon className="h-6 w-6" style={{ color: feature.color }} />
-                      </div>
-                      <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                      <p className="text-sm text-slate-400">{feature.description}</p>
-                    </div>
-                  </MagicCard>
-                </motion.div>
-              ))}
+                  提交需求
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/knowledge"
+                  className="inline-flex items-center gap-2 px-8 py-3 border border-white/20 rounded-lg font-medium hover:bg-white/10 transition-colors text-white"
+                >
+                  探索知识库
+                </Link>
+              </div>
             </motion.div>
-          </div>
-        </section>
-
-        {/* CTA 区域 */}
-        <section className="py-20 px-4" style={{
-          background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 50%, rgba(147, 197, 253, 0.08) 100%)",
-        }}>
-          <motion.div
-            className="container mx-auto text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              有项目想法？让我们一起实现
-            </h2>
-            <p className="text-slate-400 max-w-xl mx-auto mb-8">
-              无论是产品开发、技术咨询还是技术合作，我都期待与您交流
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/request"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-400 transition-all hover:shadow-lg hover:shadow-indigo-500/25"
-              >
-                提交需求
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/knowledge"
-                className="inline-flex items-center gap-2 px-8 py-3 border rounded-lg font-medium transition-colors"
-                style={{ borderColor: "rgba(100, 116, 139, 0.5)" }}
-              >
-                探索知识库
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-      </div>
-    </MagicBackground>
+          </section>
+        </div>
+      </MagicBackground>
+    </SeasonBackground>
   );
 }
