@@ -33,7 +33,7 @@ export default function HomePage() {
         <HeroSection />
 
         {/* 第二屏：技术栈 + 特色卡片（Hero 滚动拉开后露出） */}
-          <section className="min-h-screen flex items-center justify-center px-4 pt-24 pb-20" style={{ background: "#f8fafc" }}>
+          <section className="min-h-screen flex items-center justify-center px-4 py-20" style={{ background: "#f8fafc" }}>
             <div className="container mx-auto max-w-5xl">
               {/* 技术栈 */}
               <motion.div
