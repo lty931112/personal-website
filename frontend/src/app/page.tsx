@@ -7,14 +7,13 @@ import { SkillsSection } from "@/components/home/SkillsSection";
 import { MagicBackground } from "@/components/ui/magic-background";
 import { MagicCard } from "@/components/ui/magic-card";
 import { SeasonBackground } from "@/components/ui/season-background";
-import { Snowfall } from "@/components/ui/snowfall";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Zap, Shield, Heart } from "lucide-react";
 
 /**
  * 首页
- * 四季背景 + 鼠标彩色云光 + 飘雪动画
+ * 四季滚动背景 + 鼠标彩色云光效果
  */
 
 const features = [
@@ -47,11 +46,8 @@ const features = [
 export default function HomePage() {
   return (
     <SeasonBackground>
-      <MagicBackground gradientSize={500}>
-        <div className="flex flex-col" style={{ color: "#e2e8f0" }}>
-          {/* 飘雪动画 */}
-          <Snowfall snowflakeCount={60} enabled={true} />
-
+      <MagicBackground gradientSize={600}>
+        <div className="flex flex-col" style={{ color: "#1e293b" }}>
           {/* Hero 横幅区域 */}
           <HeroSection />
 
@@ -74,8 +70,8 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="text-3xl font-bold mb-4" style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>为什么选择我</h2>
-                <p className="text-slate-300 max-w-2xl mx-auto" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.5)" }}>
+                <h2 className="text-3xl font-bold mb-4">为什么选择我</h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">
                   专注于技术深度和产品质量，为每一个项目提供最佳解决方案
                 </p>
               </motion.div>
@@ -102,19 +98,19 @@ export default function HomePage() {
                       gradientOpacity={0.25}
                     >
                       <div className="p-6 rounded-xl border h-full" style={{
-                        background: "rgba(0, 0, 0, 0.25)",
-                        borderColor: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.6)",
+                        borderColor: "rgba(0, 0, 0, 0.08)",
                         backdropFilter: "blur(16px)",
                         WebkitBackdropFilter: "blur(16px)",
-                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
                       }}>
                         <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{
-                          background: `${feature.color}30`,
+                          background: `${feature.color}15`,
                         }}>
                           <feature.icon className="h-6 w-6" style={{ color: feature.color }} />
                         </div>
-                        <h3 className="text-lg font-semibold mb-2" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.3)" }}>{feature.title}</h3>
-                        <p className="text-sm text-slate-300">{feature.description}</p>
+                        <h3 className="text-lg font-semibold mb-2 text-slate-800">{feature.title}</h3>
+                        <p className="text-sm text-slate-600">{feature.description}</p>
                       </div>
                     </MagicCard>
                   </motion.div>
@@ -132,10 +128,10 @@ export default function HomePage() {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 有项目想法？让我们一起实现
               </h2>
-              <p className="text-slate-300 max-w-xl mx-auto mb-8" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.5)" }}>
+              <p className="text-slate-600 max-w-xl mx-auto mb-8">
                 无论是产品开发、技术咨询还是技术合作，我都期待与您交流
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -148,7 +144,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/knowledge"
-                  className="inline-flex items-center gap-2 px-8 py-3 border border-white/20 rounded-lg font-medium hover:bg-white/10 transition-colors text-white"
+                  className="inline-flex items-center gap-2 px-8 py-3 border border-slate-300 rounded-lg font-medium hover:bg-slate-100 transition-colors text-slate-700"
                 >
                   探索知识库
                 </Link>
