@@ -73,7 +73,7 @@ const cardVariants = {
 
 export function SkillsSection() {
   return (
-    <section className="py-16 px-4 bg-muted/30">
+    <section className="py-16 px-4">
       <div className="container mx-auto">
         {/* 标题 */}
         <motion.div
@@ -84,7 +84,7 @@ export function SkillsSection() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-bold mb-4">技术栈</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-slate-600 max-w-2xl mx-auto">
             多年开发经验积累的技术能力，覆盖前端、后端、人工智能和 DevOps 全栈领域
           </p>
         </motion.div>
@@ -100,7 +100,8 @@ export function SkillsSection() {
           {skillCategories.map((category) => (
             <motion.div
               key={category.title}
-              className="bg-card rounded-xl border p-6 hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+              className="rounded-xl border p-6 hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+              style={{ background: "rgba(255,255,255,0.55)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)" }}
               variants={cardVariants}
             >
               {/* 分类标题 */}
@@ -115,7 +116,7 @@ export function SkillsSection() {
                   <div key={skill.name}>
                     <div className="flex justify-between text-sm mb-1">
                       <span>{skill.name}</span>
-                      <span className="text-muted-foreground">{skill.level}%</span>
+                      <span className="text-slate-500">{skill.level}%</span>
                     </div>
                     {/* 进度条 */}
                     <div className="h-2 bg-muted rounded-full overflow-hidden">

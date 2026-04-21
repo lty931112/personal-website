@@ -70,7 +70,7 @@ const cardVariants = {
 
 export function FeaturedProducts() {
   return (
-    <section className="py-16 px-4 bg-muted/30">
+    <section className="py-16 px-4">
       <div className="container mx-auto">
         {/* 标题栏 */}
         <motion.div
@@ -82,13 +82,13 @@ export function FeaturedProducts() {
         >
           <div>
             <h2 className="text-3xl font-bold mb-2">精选作品</h2>
-            <p className="text-muted-foreground">
+            <p className="text-slate-600">
               我参与开发的一些代表性项目
             </p>
           </div>
           <Link
             href="/products"
-            className="hidden md:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="hidden md:inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground transition-colors"
           >
             查看全部作品
             <ArrowRight className="h-4 w-4" />
@@ -115,7 +115,8 @@ export function FeaturedProducts() {
                 className="h-full"
               >
               <div
-                className="group relative rounded-xl border overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+                className="group relative rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+                style={{ background: "rgba(255,255,255,0.55)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)" }}
               >
                 {/* 封面图 */}
               <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
@@ -130,7 +131,7 @@ export function FeaturedProducts() {
                 </h3>
 
                 {/* 描述 */}
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                <p className="text-sm text-slate-600 mb-4 line-clamp-2">
                   {product.description}
                 </p>
 
@@ -158,7 +159,7 @@ export function FeaturedProducts() {
                     href={product.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+                    className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground"
                   >
                     <Github className="h-3.5 w-3.5" />
                     源码
@@ -184,7 +185,7 @@ export function FeaturedProducts() {
         <div className="mt-8 text-center md:hidden">
           <Link
             href="/products"
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground transition-colors"
           >
             查看全部作品
             <ArrowRight className="h-4 w-4" />

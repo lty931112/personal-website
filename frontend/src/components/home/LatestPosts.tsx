@@ -74,13 +74,13 @@ export function LatestPosts() {
         >
           <div>
             <h2 className="text-3xl font-bold mb-2">最新文章</h2>
-            <p className="text-muted-foreground">
+            <p className="text-slate-600">
               分享技术心得和行业洞察
             </p>
           </div>
           <Link
             href="/blog"
-            className="hidden md:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="hidden md:inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground transition-colors"
           >
             查看全部文章
             <ArrowRight className="h-4 w-4" />
@@ -102,7 +102,8 @@ export function LatestPosts() {
             >
               <Link
                 href={`/blog/${post.slug}`}
-                className="group block h-full bg-card rounded-xl border overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300"
+                className="group block h-full rounded-xl overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300"
+                style={{ background: "rgba(255,255,255,0.55)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)" }}
               >
                 {/* 封面图 */}
                 <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
@@ -117,7 +118,7 @@ export function LatestPosts() {
                       <Tag className="h-3 w-3" />
                       {post.category}
                     </span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-slate-500">
                       {post.readTime}
                     </span>
                   </div>
@@ -128,12 +129,12 @@ export function LatestPosts() {
                   </h3>
 
                   {/* 摘要 */}
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                  <p className="text-sm text-slate-600 mb-4 line-clamp-2">
                     {post.excerpt}
                   </p>
 
                   {/* 日期 */}
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1 text-xs text-slate-500">
                     <Calendar className="h-3 w-3" />
                     <time>{post.date}</time>
                   </div>
@@ -147,7 +148,7 @@ export function LatestPosts() {
         <div className="mt-8 text-center md:hidden">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground transition-colors"
           >
             查看全部文章
             <ArrowRight className="h-4 w-4" />

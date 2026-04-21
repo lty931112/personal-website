@@ -47,7 +47,7 @@ const itemVariants = {
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-background py-20 md:py-32">
+    <section className="relative overflow-hidden bg-transparent py-20 md:py-32">
       {/* 背景装饰 */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
@@ -81,7 +81,7 @@ export function HeroSection() {
 
             {/* 职位/身份 */}
             <motion.h2
-              className="text-xl md:text-2xl text-muted-foreground mb-6"
+              className="text-xl md:text-2xl text-slate-600 mb-6"
               variants={itemVariants}
             >
               全栈开发者 · 技术博主 · 终身学习者
@@ -89,7 +89,7 @@ export function HeroSection() {
 
             {/* 简介 */}
             <motion.p
-              className="text-base md:text-lg text-muted-foreground max-w-xl mb-8 mx-auto lg:mx-0"
+              className="text-base md:text-lg text-slate-600 max-w-xl mb-8 mx-auto lg:mx-0"
               variants={itemVariants}
             >
               热爱技术，专注于 Web 全栈开发和人工智能应用。
@@ -104,20 +104,22 @@ export function HeroSection() {
             >
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all hover:shadow-lg hover:shadow-primary/25"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                style={{ background: "rgba(255,255,255,0.5)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)", color: "#1e293b" }}
               >
                 查看作品
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 border rounded-lg font-medium hover:bg-accent transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                style={{ background: "rgba(255,255,255,0.35)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.3)", boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4)", color: "#334155" }}
               >
                 阅读博客
               </Link>
               <Link
                 href="/request"
-                className="inline-flex items-center gap-2 px-6 py-3 text-primary hover:bg-primary/10 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 text-slate-700 hover:bg-white/30 rounded-lg font-medium transition-colors"
               >
                 联系我
               </Link>
@@ -134,7 +136,7 @@ export function HeroSection() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                  className="p-2 rounded-lg text-slate-500 hover:text-foreground hover:bg-accent transition-colors"
                   aria-label={link.label}
                 >
                   <link.icon className="h-5 w-5" />
@@ -176,14 +178,15 @@ export function HeroSection() {
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              className="text-center p-4 rounded-lg bg-card/50 border"
+              className="text-center p-4 rounded-lg"
+              style={{ background: "rgba(255,255,255,0.4)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.3)", boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }}
               variants={itemVariants}
               custom={index}
             >
               <p className="text-3xl md:text-4xl font-bold text-primary mb-1">
                 {stat.value}
               </p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className="text-sm text-slate-600">{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>
