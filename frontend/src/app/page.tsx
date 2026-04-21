@@ -100,17 +100,13 @@ export default function HomePage() {
             </div>
           </section>
 
-        {/* 第三屏：卷帘门展开 - 精选作品 */}
+        {/* 第三屏：卷帘门展开 - 精选作品 + 最新文章 */}
         <BlindsReveal slats={10} staggerDelay={60}>
           <section className="py-20 px-4" style={{ background: "#f8fafc" }}>
             <FeaturedProducts />
-          </section>
-        </BlindsReveal>
-
-        {/* 第五屏：卷帘门展开 - 最新文章 */}
-        <BlindsReveal slats={10} staggerDelay={60}>
-          <section className="py-20 px-4" style={{ background: "#f1f5f9" }}>
-            <LatestPosts />
+            <div className="mt-12">
+              <LatestPosts />
+            </div>
           </section>
         </BlindsReveal>
 
