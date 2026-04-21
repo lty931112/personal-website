@@ -1,74 +1,96 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, ReactNode } from "react";
 
 /**
  * 全局鼠标跟随彩色云光效果
- * 挂载到页面上，鼠标移动时整个页面出现大型彩色光晕跟随
- * 使用 document 级别事件监听，覆盖整个可视区域
+ * 使用 CSS mix-blend-mode 确保在深色背景上清晰可见
+ * 鼠标移动时显示，停止移动后自动淡出
  */
 
 interface MagicBackgroundProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
-  /** 光晕半径（px） */
   gradientSize?: number;
-  /** 光晕颜色 */
   gradientColor?: string;
-  /** 光晕透明度 */
   gradientOpacity?: number;
 }
 
 export function MagicBackground({
   children,
   className = "",
-  gradientSize = 500,
+  gradientSize = 600,
   gradientColor = "#818cf8",
-  gradientOpacity = 0.15,
+  gradientOpacity = 0.2,
 }: MagicBackgroundProps) {
+  const glowRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
-  const [position, setPosition] = useState({ x: -1000, y: -1000 });
-  const [opacity, setOpacity] = useState(0);
+  const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    });
-  }, []);
-
-  const handleMouseEnter = useCallback(() => {
-    setOpacity(gradientOpacity);
-  }, [gradientOpacity]);
-
-  const handleMouseLeave = useCallback(() => {
-    setOpacity(0);
+  const showGlow = useCallback(() => {
+    setIsVisible(true);
+    // 清除之前的淡出定时器
+    if (fadeTimerRef.current) {
+      clearTimeout(fadeTimerRef.current);
+    }
+    // 3 秒无移动后淡出
+    fadeTimerRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
   }, []);
 
   useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseenter", handleMouseEnter);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseenter", handleMouseEnter);
-      document.removeEventListener("mouseleave", handleMouseLeave);
+    const handleMouseMove = (e: MouseEvent) => {
+      showGlow();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        if (glowRef.current) {
+          glowRef.current.style.left = `${e.clientX}px`;
+          glowRef.current.style.top = `${e.clientY}px`;
+          glowRef.current.style.opacity = "1";
+        }
+      });
     };
-  }, [handleMouseMove, handleMouseEnter, handleMouseLeave]);
+
+    const handleMouseLeave = () => {
+      if (glowRef.current) {
+        glowRef.current.style.opacity = "0";
+      }
+      setIsVisible(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
+    };
+  }, [showGlow]);
 
   return (
-    <div className={`relative ${className}`}>
-      {/* 全局彩色云光 - fixed 定位覆盖整个视口 */}
+    <div className={className}>
+      {/* 全局彩色云光 - 使用 transform 定位避免触发 layout */}
       <div
-        className="pointer-events-none fixed inset-0 z-[100] transition-opacity duration-500 ease-out"
+        ref={glowRef}
+        className="pointer-events-none fixed z-[9999] rounded-full"
         style={{
-          opacity: opacity,
-          background: `radial-gradient(${gradientSize}px circle at ${position.x}px ${position.y}px, ${gradientColor}, transparent 50%)`,
+          width: `${gradientSize}px`,
+          height: `${gradientSize}px`,
+          left: "-1000px",
+          top: "-1000px",
+          transform: "translate(-50%, -50%)",
+          opacity: 0,
+          transition: "opacity 0.8s ease-out",
+          background: `radial-gradient(circle, ${gradientColor} 0%, transparent 70%)`,
+          mixBlendMode: "screen",
+          filter: "blur(40px)",
         }}
       />
-      {/* 内容 */}
-      <div className="relative">{children}</div>
+      {children}
     </div>
   );
 }
