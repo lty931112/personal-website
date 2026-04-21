@@ -7,7 +7,6 @@ import { SkillsSection } from "@/components/home/SkillsSection";
 import { MagicCard } from "@/components/ui/magic-card";
 import { RibbonTrail } from "@/components/ui/ribbon-trail";
 import { RippleClick } from "@/components/ui/ripple-click";
-import { ScrollSplit } from "@/components/ui/scroll-split";
 import { BlindsReveal } from "@/components/ui/blinds-reveal";
 import { BootAnimation } from "@/components/ui/boot-animation";
 import { motion } from "framer-motion";
@@ -34,8 +33,7 @@ export default function HomePage() {
         {/* 第一屏：斜切分屏个人介绍 */}
         <HeroSection />
 
-        {/* 第二屏：滚动斜切分开 → 统计卡片 + 特色 */}
-        <ScrollSplit>
+        {/* 第二屏：特色卡片（Hero 滚动拉开后露出） */}
           <section className="min-h-screen flex items-center justify-center px-4 py-20" style={{ background: "#f8fafc" }}>
             <div className="container mx-auto max-w-5xl">
               <motion.div
@@ -85,7 +83,6 @@ export default function HomePage() {
               </motion.div>
             </div>
           </section>
-        </ScrollSplit>
 
         {/* 第三屏：技术栈卡片墙 */}
         <section className="py-20 px-4" style={{ background: "linear-gradient(180deg, #f8fafc, #f1f5f9)" }}>
