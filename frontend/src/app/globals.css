@@ -93,3 +93,13 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+/* ===========================================
+   全局按钮样式 - 椭圆弧度圆角
+   =========================================== */
+@layer base {
+  a[class*="rounded-"],
+  button[class*="rounded-"] {
+    border-radius: 9999px !important;
+  }
+}

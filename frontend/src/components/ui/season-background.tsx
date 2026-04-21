@@ -22,7 +22,7 @@ const seasons = [
   { name: "春 · 晨", top: "#fce4b8", mid: "#f0b88c", bottom: "#c8e0b0", glow: "rgba(255, 220, 150, 0.4)", labelColor: "#f0b88c" },
   { name: "夏 · 午", top: "#88c8e8", mid: "#48a8d8", bottom: "#2888c8", glow: "rgba(255, 255, 200, 0.3)", labelColor: "#48a8d8" },
   { name: "秋 · 暮", top: "#e8a060", mid: "#f08040", bottom: "#c05828", glow: "rgba(255, 140, 50, 0.35)", labelColor: "#e87038" },
-  { name: "冬 · 夜", top: "#2a2a4a", mid: "#1e1e3a", bottom: "#0a0a18", glow: "rgba(180, 200, 255, 0.15)", labelColor: "#6a6a9a" },
+  { name: "冬 · 夜", top: "#2a2a4a", mid: "#1e1e3a", bottom: "#3d2e1a", glow: "rgba(180, 200, 255, 0.15)", labelColor: "#6a6a9a" },
 ];
 
 /* 颜色插值 */
