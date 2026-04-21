@@ -9,9 +9,7 @@ import { useState, ReactNode } from "react";
  */
 
 interface FlipCardProps {
-  /** 正面内容（默认展示 - 项目说明） */
   front: ReactNode;
-  /** 背面内容（悬停展示 - 效果图） */
   back: ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -22,7 +20,7 @@ export function FlipCard({ front, back, className = "", style }: FlipCardProps) 
 
   return (
     <div
-      className={`relative h-full ${className}`}
+      className={`group ${className}`}
       style={{
         perspective: "1000px",
         ...style,
@@ -31,15 +29,14 @@ export function FlipCard({ front, back, className = "", style }: FlipCardProps) 
       onMouseLeave={() => setIsFlipped(false)}
     >
       <div
-        className="relative w-full h-full transition-transform duration-700 ease-in-out"
+        className="relative transition-transform duration-700 ease-in-out"
         style={{
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-        {/* 正面 - 项目说明 */}
+        {/* 正面 - 项目说明（用 grid 让正面撑起高度） */}
         <div
-          className="absolute inset-0 w-full h-full overflow-hidden"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -48,9 +45,9 @@ export function FlipCard({ front, back, className = "", style }: FlipCardProps) 
           {front}
         </div>
 
-        {/* 背面 - 效果图 */}
+        {/* 背面 - 效果图（absolute 覆盖在正面之上） */}
         <div
-          className="absolute inset-0 w-full h-full overflow-hidden"
+          className="absolute inset-0 overflow-hidden"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
