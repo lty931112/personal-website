@@ -115,8 +115,9 @@ export function FeaturedProducts() {
                 className="h-full"
               >
               <div
-              className="group relative rounded-xl border overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col"
-              {/* 封面图 */}
+                className="group relative rounded-xl border overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+              >
+                {/* 封面图 */}
               <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                 <span className="text-6xl opacity-50">🚀</span>
               </div>
