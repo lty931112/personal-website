@@ -13,12 +13,15 @@ interface AutoScrollProps {
   className?: string;
   /** 滚动速度（px/s），负值表示反向 */
   speed?: number;
+  /** 内容复制份数（确保填满屏幕） */
+  copies?: number;
 }
 
 export function AutoScroll({
   children,
   className = "",
   speed = 40,
+  copies = 4,
 }: AutoScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -26,7 +29,6 @@ export function AutoScroll({
   const [isPaused, setIsPaused] = useState(false);
   const offsetRef = useRef(0);
   const lastTimeRef = useRef(0);
-  const halfWidthRef = useRef(0);
 
   const animate = useCallback((timestamp: number) => {
     if (!lastTimeRef.current) lastTimeRef.current = timestamp;
@@ -37,21 +39,18 @@ export function AutoScroll({
       offsetRef.current -= speed * dt;
 
       const content = contentRef.current;
-      if (content) {
-        // 首次计算一半宽度
-        if (halfWidthRef.current === 0) {
-          halfWidthRef.current = content.scrollWidth / 2;
-        }
-        const halfWidth = halfWidthRef.current;
-
-        if (halfWidth > 0) {
-          // 正向滚动（speed > 0）：offset 变负，超过 halfWidth 时重置
-          if (speed > 0 && offsetRef.current <= -halfWidth) {
-            offsetRef.current += halfWidth;
+      const container = containerRef.current;
+      if (content && container) {
+        // 每帧实时计算单份内容宽度
+        const singleWidth = content.scrollWidth / copies;
+        if (singleWidth > 0) {
+          // 正向滚动：offset 变负，超过一份宽度时重置
+          if (speed > 0 && offsetRef.current <= -singleWidth) {
+            offsetRef.current += singleWidth;
           }
-          // 反向滚动（speed < 0）：offset 变正，超过 halfWidth 时重置
+          // 反向滚动：offset 变正，超过一份宽度时重置
           if (speed < 0 && offsetRef.current >= 0) {
-            offsetRef.current -= halfWidth;
+            offsetRef.current -= singleWidth;
           }
         }
 
@@ -60,7 +59,7 @@ export function AutoScroll({
     }
 
     animRef.current = requestAnimationFrame(animate);
-  }, [isPaused, speed]);
+  }, [isPaused, speed, copies]);
 
   useEffect(() => {
     animRef.current = requestAnimationFrame(animate);
@@ -77,9 +76,9 @@ export function AutoScroll({
       onMouseLeave={() => setIsPaused(false)}
     >
       <div ref={contentRef} className="flex w-max">
-        {children}
-        {/* 复制一份实现无限循环 */}
-        {children}
+        {Array.from({ length: copies }, (_, i) => (
+          <div key={i}>{children}</div>
+        ))}
       </div>
     </div>
   );
