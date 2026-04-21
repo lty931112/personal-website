@@ -4,8 +4,8 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 import { LatestPosts } from "@/components/home/LatestPosts";
 import { SkillsSection } from "@/components/home/SkillsSection";
-import { SpotlightBackground } from "@/components/ui/spotlight-background";
-import { SpotlightCard } from "@/components/ui/spotlight-card";
+import { MagicBackground } from "@/components/ui/magic-background";
+import { MagicCard } from "@/components/ui/magic-card";
 import { Snowfall } from "@/components/ui/snowfall";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -13,30 +13,34 @@ import { ArrowRight, Sparkles, Zap, Shield, Heart } from "lucide-react";
 
 /**
  * 首页
- * 雪夜主题 + 鼠标跟随光效 + 飘雪动画
+ * 雪夜主题 + 鼠标彩色云光效果 + 飘雪动画
  */
 
-/* 特色功能数据 */
+/* 特色功能数据 - 每个卡片使用不同的彩色光 */
 const features = [
   {
     icon: Zap,
     title: "高性能",
     description: "采用 Next.js 15 + React 19，支持 SSR/SSG，首屏加载极速体验",
+    color: "#6366f1", // indigo
   },
   {
     icon: Shield,
     title: "安全可靠",
     description: "Spring Security + JWT 认证，完善的权限管理和数据保护",
+    color: "#8b5cf6", // violet
   },
   {
     icon: Sparkles,
     title: "智能检索",
     description: "基于 MAGMA 多图记忆架构，支持语义、时序、因果、实体四维检索",
+    color: "#ec4899", // pink
   },
   {
     icon: Heart,
     title: "用心打造",
     description: "注重细节和用户体验，每一个功能都经过精心设计和打磨",
+    color: "#f97316", // orange
   },
 ];
 
@@ -49,14 +53,14 @@ export default function HomePage() {
       {/* 飘雪动画 */}
       <Snowfall snowflakeCount={80} enabled={true} />
 
-      {/* Hero 横幅区域 - 带聚光灯背景 */}
-      <SpotlightBackground
-        spotlightSize={800}
-        spotlightColor="147, 197, 253"
-        gradientOpacity={0.08}
+      {/* Hero 横幅区域 - 带彩色云光背景 */}
+      <MagicBackground
+        gradientSize={800}
+        gradientColor="#818cf8"
+        gradientOpacity={0.1}
       >
         <HeroSection />
-      </SpotlightBackground>
+      </MagicBackground>
 
       {/* 精选作品 */}
       <FeaturedProducts />
@@ -67,7 +71,7 @@ export default function HomePage() {
       {/* 技术栈 */}
       <SkillsSection />
 
-      {/* 特色区域 */}
+      {/* 特色区域 - 每张卡片不同彩色云光 */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <motion.div
@@ -98,21 +102,26 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <SpotlightCard className="h-full" spotlightColor="147, 197, 253">
+                <MagicCard
+                  className="h-full"
+                  gradientSize={300}
+                  gradientColor={feature.color}
+                  gradientOpacity={0.2}
+                >
                   <div className="p-6 rounded-xl border h-full" style={{
                     background: "rgba(30, 41, 59, 0.6)",
                     borderColor: "rgba(71, 85, 105, 0.5)",
                     backdropFilter: "blur(12px)",
                   }}>
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{
-                      background: "rgba(99, 102, 241, 0.15)",
+                      background: `${feature.color}20`,
                     }}>
-                      <feature.icon className="h-6 w-6 text-indigo-400" />
+                      <feature.icon className="h-6 w-6" style={{ color: feature.color }} />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
                     <p className="text-sm text-slate-400">{feature.description}</p>
                   </div>
-                </SpotlightCard>
+                </MagicCard>
               </motion.div>
             ))}
           </motion.div>

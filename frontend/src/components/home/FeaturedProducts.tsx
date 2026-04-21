@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, Github } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { MagicCard } from "@/components/ui/magic-card";
 
 /**
  * 最新产品展示组件
@@ -11,6 +12,9 @@ import { Badge } from "@/components/ui/badge";
  */
 
 /* 模拟产品数据 */
+/* 每个产品的彩色光颜色 */
+const productColors = ["#6366f1", "#8b5cf6", "#ec4899"];
+
 const featuredProducts = [
   {
     id: 1,
@@ -99,12 +103,19 @@ export function FeaturedProducts() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {featuredProducts.map((product) => (
+          {featuredProducts.map((product, idx) => (
             <motion.div
               key={product.id}
-              className="group relative bg-card rounded-xl border overflow-hidden hover:shadow-xl transition-all duration-300"
               variants={cardVariants}
             >
+              <MagicCard
+                gradientSize={350}
+                gradientColor={productColors[idx % productColors.length]}
+                gradientOpacity={0.2}
+                className="h-full"
+              >
+              <div
+              className="group relative rounded-xl border overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col"
               {/* 封面图 */}
               <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                 <span className="text-6xl opacity-50">🚀</span>
@@ -162,6 +173,8 @@ export function FeaturedProducts() {
               >
                 <span className="sr-only">查看详情</span>
               </Link>
+              </div>
+              </MagicCard>
             </motion.div>
           ))}
         </motion.div>
