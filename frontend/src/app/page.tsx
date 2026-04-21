@@ -50,9 +50,9 @@ export default function HomePage() {
       <RibbonTrail
         colors={["#ff9346", "#7cff67", "#ffee51", "#00d8ff", "#ff6b9d", "#c084fc"]}
         ribbonCount={4}
-        ribbonWidth={18}
-        trailLength={50}
-        fadeSpeed={0.012}
+        dotSize={8}
+        maxSpread={4}
+        fadeSpeed={0.008}
       >
         <div className="flex flex-col" style={{ color: "#1e293b" }}>
           {/* Hero 横幅区域 */}
