@@ -82,6 +82,7 @@ export function SeasonBackground({ children, className = "" }: SeasonBackgroundP
       {/* 动态背景 - 跟随滚动渐变 */}
       <div
         className="fixed inset-0 z-0 transition-all duration-300"
+        data-season-bg
         style={{
           background: `linear-gradient(180deg, ${topColor} 0%, ${midColor} 50%, ${bottomColor} 100%)`,
         }}
