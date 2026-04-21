@@ -54,7 +54,7 @@ export default function HomePage() {
         maxSpread={4}
         fadeSpeed={0.008}
       >
-        <div className="flex flex-col" style={{ color: "#1e293b" }}>
+        <div className="flex flex-col pt-20" style={{ color: "#1e293b" }}>
           {/* Hero 横幅区域 */}
           <HeroSection />
 

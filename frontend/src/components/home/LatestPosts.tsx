@@ -4,11 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
 import { FlipCard } from "@/components/ui/flip-card";
+import { AutoScroll } from "@/components/ui/auto-scroll";
 
 /**
- * 最新动态组件
- * 首页展示最新的博客文章
- * 卡片翻转效果：默认说明，悬停展示效果图
+ * 最新文章 - 横向自动滚动（反向）
  */
 
 const latestPosts = [
@@ -44,23 +43,6 @@ const latestPosts = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5 },
-  },
-};
-
 const glassStyle = {
   background: "rgba(255,255,255,0.55)",
   backdropFilter: "blur(16px)",
@@ -68,6 +50,42 @@ const glassStyle = {
   border: "1px solid rgba(255,255,255,0.4)",
   boxShadow: "0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)",
 };
+
+function PostCard({ post }: { post: typeof latestPosts[0] }) {
+  return (
+    <div className="shrink-0 w-[320px]">
+      <FlipCard className="rounded-xl" style={glassStyle}
+        front={
+          <div className="p-6 h-full flex flex-col" style={{ minHeight: "280px" }}>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="inline-flex items-center gap-1 text-xs px-3 py-1 bg-indigo-500/10 text-indigo-600 font-medium">
+                <Tag className="h-3 w-3" />{post.category}
+              </span>
+              <span className="text-xs text-slate-500">{post.readTime}</span>
+            </div>
+            <h3 className="text-lg font-bold mb-3 text-slate-800 line-clamp-2">{post.title}</h3>
+            <p className="text-sm text-slate-600 mb-5 flex-grow line-clamp-3">{post.excerpt}</p>
+            <div className="flex items-center gap-1 text-xs text-slate-500">
+              <Calendar className="h-3 w-3" />
+              <time>{post.date}</time>
+            </div>
+            <p className="text-xs text-slate-400 mt-3 text-center">悬停查看效果图 →</p>
+          </div>
+        }
+        back={
+          <Link href={`/blog/${post.slug}`} className="block h-full">
+            <div className={`h-full bg-gradient-to-br ${post.coverGradient} flex flex-col items-center justify-center p-8`} style={{ minHeight: "280px" }}>
+              <span className="text-8xl mb-6">{post.coverEmoji}</span>
+              <h3 className="text-lg font-bold text-slate-800 mb-2">{post.title}</h3>
+              <p className="text-sm text-slate-500 mb-4">{post.category} · {post.readTime}</p>
+              <span className="text-xs text-slate-400">点击阅读全文 →</span>
+            </div>
+          </Link>
+        }
+      />
+    </div>
+  );
+}
 
 export function LatestPosts() {
   return (
@@ -84,60 +102,25 @@ export function LatestPosts() {
             <h2 className="text-3xl font-bold mb-2">最新文章</h2>
             <p className="text-slate-600">分享技术心得和行业洞察</p>
           </div>
-          <Link
-            href="/blog"
-            className="hidden md:inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground transition-colors"
-          >
-            查看全部文章
-            <ArrowRight className="h-4 w-4" />
+          <Link href="/blog" className="hidden md:inline-flex items-center gap-1 text-sm text-slate-500 hover:text-foreground transition-colors">
+            查看全部文章 <ArrowRight className="h-4 w-4" />
           </Link>
         </motion.div>
 
+        {/* 横向自动滚动（反向） */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
-          {latestPosts.map((post) => (
-            <motion.div key={post.slug} variants={cardVariants}>
-              <FlipCard
-                className="rounded-xl"
-                style={glassStyle}
-                front={
-                  /* 正面 - 文章说明 */
-                  <div className="p-6 h-full flex flex-col">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="inline-flex items-center gap-1 text-xs px-3 py-1 bg-indigo-500/10 text-indigo-600 font-medium">
-                        <Tag className="h-3 w-3" />
-                        {post.category}
-                      </span>
-                      <span className="text-xs text-slate-500">{post.readTime}</span>
-                    </div>
-                    <h3 className="text-lg font-bold mb-3 text-slate-800 line-clamp-2">{post.title}</h3>
-                    <p className="text-sm text-slate-600 mb-5 flex-grow line-clamp-3">{post.excerpt}</p>
-                    <div className="flex items-center gap-1 text-xs text-slate-500">
-                      <Calendar className="h-3 w-3" />
-                      <time>{post.date}</time>
-                    </div>
-                    <p className="text-xs text-slate-400 mt-3 text-center">悬停查看效果图 →</p>
-                  </div>
-                }
-                back={
-                  /* 背面 - 效果图 */
-                  <Link href={`/blog/${post.slug}`} className="block h-full">
-                    <div className={`h-full bg-gradient-to-br ${post.coverGradient} flex flex-col items-center justify-center p-8`}>
-                      <span className="text-8xl mb-6">{post.coverEmoji}</span>
-                      <h3 className="text-lg font-bold text-slate-800 mb-2">{post.title}</h3>
-                      <p className="text-sm text-slate-500 mb-4">{post.category} · {post.readTime}</p>
-                      <span className="text-xs text-slate-400">点击阅读全文 →</span>
-                    </div>
-                  </Link>
-                }
-              />
-            </motion.div>
-          ))}
+          <AutoScroll speed={-30} className="py-4">
+            {latestPosts.map((post) => (
+              <div key={post.slug} className="pr-6">
+                <PostCard post={post} />
+              </div>
+            ))}
+          </AutoScroll>
         </motion.div>
 
         <div className="mt-8 text-center md:hidden">
